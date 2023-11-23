@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      input {
+        height: 40px;
+        width: 213px;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      button {
+        height: 50px;
+        width: 50px;
+        font-size: 18px;
+        padding: 10px 10px;
+        margin: 1px;
+      }
+      .number-btn {
+        background-color: lightgreen;
+      }
+      .operator-btn {
+        background-color: lightskyblue;
+      }
+      #btnEquals {
+        background-color: lightyellow;
+      }
+      #btnClear {
+        background-color: lightcoral;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="calculator">
+      <input id="display" type="text" disabled />
+      <br />
+      <button class="number-btn">1</button>
+      <button class="number-btn">2</button>
+      <button class="number-btn">3</button>
+      <button class="operator-btn">/</button><br />
+      <button class="number-btn">4</button>
+      <button class="number-btn">5</button>
+      <button class="number-btn">6</button>
+      <button class="operator-btn">*</button><br />
+      <button class="number-btn">7</button>
+      <button class="number-btn">8</button>
+      <button class="number-btn">9</button>
+      <button class="operator-btn">-</button><br />
+      <button id="btnClear">C</button>
+      <button class="number-btn">0</button>
+      <button id="btnEquals">=</button>
+      <button class="operator-btn">+</button>
+    </div>
+
+    <script>
+      class Calculator {
+        constructor() {
+          this.display = "";
+          this.operator = "";
+          this.firstOperand = "";
+          this.secondOperand = "";
+
+          this.clearDisplay();
+          this.operator = "";
+          this.firstOperand = "";
+          this.secondOperand = "";
+        }
+
+        getDisplay() {
+          return this.display;
+        }
+
+        setDisplay(value) {
+          this.display = value;
+        }
+
+        appendToDisplay(value) {
+          this.display += value;
+        }
+
+        clearDisplay() {
+          this.display = "";
+        }
+
+        setOperator(operator) {
+          this.operator = operator;
+          this.firstOperand = this.display;
+          this.clearDisplay();
+        }
+
+        calculate() {
+          this.secondOperand = this.display;
+          const num1 = parseFloat(this.firstOperand);
+          const num2 = parseFloat(this.secondOperand);
+
+          if (isNaN(num1) || isNaN(num2)) {
+            this.setDisplay("Error");
+          } else {
+            switch (this.operator) {
+              case "+":
+                this.setDisplay(num1 + num2);
+                break;
+              case "-":
+                this.setDisplay(num1 - num2);
+                break;
+              case "*":
+                this.setDisplay(num1 * num2);
+                break;
+              case "/":
+                this.setDisplay(num1 / num2);
+                break;
+              default:
+                this.setDisplay("Error");
+            }
+          }
+
+          this.operator = "";
+          this.firstOperand = "";
+          this.secondOperand = "";
+        }
+      }
+
+      const calculator = new Calculator();
+      const displayElement = document.getElementById("display");
+      displayElement.value = calculator.getDisplay();
+
+      const numberButtons = document.querySelectorAll(".number-btn");
+      numberButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          calculator.appendToDisplay(button.textContent);
+          displayElement.value = calculator.getDisplay();
+        });
+      });
+
+      const operatorButtons = document.querySelectorAll(".operator-btn");
+      operatorButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          calculator.setOperator(button.textContent);
+          displayElement.value = calculator.getDisplay();
+        });
+      });
+
+      const equalsButton = document.getElementById("btnEquals");
+      equalsButton.addEventListener("click", () => {
+        calculator.calculate();
+        displayElement.value = calculator.getDisplay();
+      });
+
+      const clearButton = document.getElementById("btnClear");
+      clearButton.addEventListener("click", () => {
+        calculator.clearDisplay();
+        displayElement.value = calculator.getDisplay();
+      });
+    </script>
+  </body>
+</html>
